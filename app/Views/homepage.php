@@ -8,8 +8,11 @@
 </head>
 
 <body>
-    <h1>Welcome, <?= esc($username) ?></h1>
-    <p>Your email: <?= esc($email) ?></p>
+    <h1>Welcome to the Lab Inventory Management System</h1>
+    <p>Hello, <?= esc(session()->get('username')) ?>!</p>
+
+    <p>Your role: <?= esc($role) ?></p>
+
     <a href="/logout">Logout</a>
 </body>
 

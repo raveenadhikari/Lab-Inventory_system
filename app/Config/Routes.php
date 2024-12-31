@@ -45,6 +45,19 @@ $routes->post('/login', 'AuthController::login');          // Handle login submi
 
 $routes->get('/homepage', 'AuthController::homepage');     // Display the homepage
 $routes->get('/logout', 'AuthController::logout');
+
+
+// Admin Dashboard
+$routes->get('/dashboard', 'AdminController::dashboard', ['filter' => 'rolecheck:admin']); // Display admin dashboard
+
+// Update User Role
+$routes->post('/update-role/(:num)', 'AdminController::updateRole/$1', ['filter' => 'rolecheck:admin']); // Update user role
+$routes->post('/update-role-permissions', 'AdminController::updateRolePermissions', ['filter' => 'rolecheck:superadmin']);
+
+$routes->get('/unauthorized', function () {
+    return view('errors/unauthorized');
+});
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
