@@ -55,4 +55,10 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = \Config\Services::session();
     }
+    protected function checkLogin()
+    {
+        if (!session()->has('role_id')) {
+            return redirect()->to('/login');
+        }
+    }
 }

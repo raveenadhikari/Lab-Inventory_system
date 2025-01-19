@@ -52,24 +52,24 @@
                                 </button>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="faculty" class="form-label">Faculty</label>
-                                <select name="faculty" id="faculty" class="form-select" required>
-                                    <option value="" disabled selected>Select Faculty</option>
-                                    <option value="Faculty of Science">Faculty of Science</option>
-                                    <option value="Faculty of Medicine">Faculty of Medicine</option>
-                                    <option value="Faculty of Finance and Management">Faculty of Finance and Management</option>
-                                    <option value="Faculty of Technology">Faculty of Technology</option>
-                                    <option value="Faculty of Arts">Faculty of Arts</option>
-                                    <option value="Faculty of Nursing">Faculty of Nursing</option>
-                                    <option value="Faculty of Education">Faculty of Education</option>
+                            <div class="form-group mb-3">
+                                <label for="faculty">Faculty</label>
+                                <select class="form-control" id="faculty" name="faculty_id" required>
+                                    <option value="">Select Faculty</option>
+                                    <!-- Populate with faculties from the database -->
+                                    <?php foreach ($faculties as $faculty): ?>
+                                        <option value="<?= $faculty['id'] ?>"><?= $faculty['name'] ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="department" class="form-label">Department</label>
-                                <select name="department" id="department" class="form-select">
-                                    <option value="" disabled selected>Select Department</option>
+                            <div class="form-group mb-3">
+                                <label for="department">Department</label>
+                                <select class="form-control" id="department" name="department_id" required>
+                                    <option value="">Select Department</option>
+                                    <!-- Populate with departments from the database -->
+                                    <?php foreach ($departments as $department): ?>
+                                        <option value="<?= $department['id'] ?>"><?= $department['name'] ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
 
@@ -87,73 +87,5 @@
 </div>
 
 <!-- Script to handle Faculty-Department Dependency -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const facultyDropdown = document.getElementById('faculty');
-        const departmentDropdown = document.getElementById('department');
 
-        // Predefined departments for each faculty
-        const departments = {
-            "Faculty of Science": [
-                "Department of Physics",
-                "Department of Chemistry",
-                "Department of Zoology",
-                "Department of Mathematics",
-                "Department of Nuclear Science",
-                "Department of Statistics",
-                "Department of Plant Science"
-            ],
-            "Faculty of Medicine": [
-                "Department of Anatomy",
-                "Department of Surgery",
-                "Department of Pediatrics",
-                "Department of Pharmacology"
-            ],
-            "Faculty of Finance and Management": [
-                "Department of Accounting",
-                "Department of Finance",
-                "Department of Business Management",
-                "Department of Human Resource Management"
-            ],
-            "Faculty of Technology": [
-                "Department of Information Technology",
-                "Department of Civil Technology",
-                "Department of Electrical Technology",
-                "Department of Mechanical Technology"
-            ],
-            "Faculty of Arts": [
-                "Department of English",
-                "Department of History",
-                "Department of Sociology",
-                "Department of Political Science"
-            ],
-            "Faculty of Nursing": [
-                "Department of Clinical Nursing",
-                "Department of Public Health Nursing"
-            ],
-            "Faculty of Education": [
-                "Department of Curriculum Studies",
-                "Department of Educational Psychology",
-                "Department of Teacher Education"
-            ]
-        };
-
-        // Update departments based on selected faculty
-        facultyDropdown.addEventListener('change', function() {
-            const selectedFaculty = this.value;
-            const departmentOptions = departments[selectedFaculty] || [];
-
-            // Clear existing options in the department dropdown
-            departmentDropdown.innerHTML = '<option value="" disabled selected>Select Department</option>';
-
-            // Add new options
-            departmentOptions.forEach(department => {
-                const option = document.createElement('option');
-                option.value = department;
-                option.textContent = department;
-                departmentDropdown.appendChild(option);
-            });
-        });
-    });
-</script>
 <?= $this->endSection() ?>

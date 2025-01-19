@@ -36,14 +36,14 @@ $routes->setAutoRoute(true);                    // Enable auto-routing.
  */
 
 // Define your routes here. For example:
-$routes->get('/', 'Home::index');               // Default route for the root URL.
+$routes->get('/', 'HomeController::index');               // Default route for the root URL.
 $routes->get('/register', 'AuthController::registerForm'); // Show the registration form
 $routes->post('/register', 'AuthController::register');    // Handle registration submission when click button
 
 $routes->get('/login', 'AuthController::loginForm');       // Show the login form
 $routes->post('/login', 'AuthController::login');          // Handle login submission when click button
 
-$routes->get('/homepage', 'AuthController::homepage');     // Display the homepage
+$routes->get('/homepage', 'HomeController::index');     // Display the homepage
 $routes->get('/logout', 'AuthController::logout');
 
 
@@ -57,6 +57,31 @@ $routes->post('/update-role-permissions', 'AdminController::updateRolePermission
 $routes->get('/unauthorized', function () {
     return view('errors/unauthorized');
 });
+$routes->get('/profile', 'UserController::profile');
+$routes->get('/dashboard', 'AdminController::dashboard', ['filter' => 'rolecheck:admin,superadmin']);
+
+$routes->group('labs', ['filter' => 'permission:Manage Labs'], function ($routes) {
+    $routes->get('create', 'LabController::create');
+    $routes->post('store', 'LabController::store');
+    $routes->get('edit/(:num)', 'LabController::edit/$1');
+    $routes->post('update/(:num)', 'LabController::update/$1');
+    $routes->get('/delete/(:num)', 'LabController::delete/$1');
+    /*$routes->post('delete/(:num)', 'LabController::delete/$1');*/
+});
+
+$routes->get('/labs', 'HomeController::index');
+$routes->get('/labs/filter', 'HomeController::filterLabs');
+$routes->get('labs/delete/(:num)', 'LabController::delete/$1');
+
+$routes->get('/labs/view/(:num)', 'LabController::view/$1');
+$routes->get('/labs/view/(:num)/inventory', 'LabController::inventory/$1');
+$routes->get('/labs/view/(:num)/borrowing-log', 'LabController::borrowingLog/$1');
+$routes->get('/labs/view/(:num)/analytics', 'LabController::analytics/$1');
+
+$routes->post('/labs/(:num)/components/add', 'LabController::addComponent/$1');
+$routes->get('/components/delete/(:num)', 'LabController::deleteComponent/$1');
+
+
 
 /*
  * --------------------------------------------------------------------

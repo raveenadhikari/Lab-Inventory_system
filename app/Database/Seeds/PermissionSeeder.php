@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'View Inventory', 'description' => 'View lab inventory'],
             ['name' => 'Manage Inventory', 'description' => 'Add, edit, or delete lab inventory items'],
             ['name' => 'Manage Permissions', 'description' => 'Create and assign permissions to roles'],
+            ['name' => 'Manage Labs', 'description' => 'Allow creating/editing/deleting labs']
         ];
 
         foreach ($permissions as $permission) {

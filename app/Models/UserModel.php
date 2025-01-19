@@ -14,8 +14,8 @@ class UserModel extends Model
         'username',
         'email',
         'password_hash',
-        'faculty',
-        'department',
+        'faculty_id',
+        'department_id',
         'role_id',
     ];
 
@@ -32,7 +32,8 @@ class UserModel extends Model
         'username' => 'required|min_length[3]|max_length[50]',
         'email' => 'required|valid_email|max_length[100]',
         'password_hash' => 'required|min_length[6]',
-        'faculty' => 'required|max_length[100]',
+        'faculty_id' => 'required|integer',
+        'department_id' => 'required|integer',
     ];
 
     protected $validationMessages = []; // Custom validation error messages

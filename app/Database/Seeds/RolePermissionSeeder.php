@@ -16,13 +16,14 @@ class RolePermissionSeeder extends Seeder
             ['role_id' => 1, 'permission_id' => 3], // Borrow Items
             ['role_id' => 1, 'permission_id' => 4], // Return Items
             ['role_id' => 1, 'permission_id' => 5], // View Inventory
-
             ['role_id' => 1, 'permission_id' => 7], // Manage Permissions
+            ['role_id' => 1, 'permission_id' => 8], // Manage Labs
 
             // Admin
             ['role_id' => 2, 'permission_id' => 1], // Manage Roles
             ['role_id' => 2, 'permission_id' => 2], // Manage Users
             ['role_id' => 2, 'permission_id' => 5], // View Inventory
+            ['role_id' => 2, 'permission_id' => 8], // Manage Labs
 
             ['role_id' => 2, 'permission_id' => 7], // Manage Permissions
 

@@ -4,50 +4,66 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\RoleModel;
+use App\Models\FacultyModel;
+use App\Models\DepartmentModel;
 use CodeIgniter\Controller;
 
 class AuthController extends BaseController //new change
 {
     public function registerForm()
     {
-        // Load the registration form view
-        return view('register', ['showNavbar' => false]);
+
+        // Load the Faculty and Department models
+        $facultyModel = new FacultyModel();
+        $departmentModel = new DepartmentModel();
+
+        // Fetch all faculties and departments
+        $faculties = $facultyModel->findAll();
+        log_message('debug', 'Faculties Data: ' . json_encode($faculties));
+        $departments = $departmentModel->findAll();
+
+        // Load the registration form view with faculties and departments
+        return view('register', [
+            'showNavbar' => false,
+            'faculties' => $faculties,
+            'departments' => $departments
+        ]);
     }
 
     public function register()
     {
-        // Validation rules for registration
         $validationRules = [
             'username' => 'required|min_length[3]|max_length[50]',
             'email' => 'required|valid_email|max_length[100]',
             'password' => 'required|min_length[6]',
-            'faculty' => 'required|max_length[100]',
+            'faculty_id' => 'required|integer',
+            'department_id' => 'required|integer',
         ];
 
-        // Validate input
         if (!$this->validate($validationRules)) {
+            log_message('error', 'Validation failed: ' . json_encode($this->validator->getErrors()));
+            log_message('debug', 'POST Data: ' . json_encode($this->request->getPost())); // Log all data
             return redirect()->back()->with('error', $this->validator->getErrors());
         }
 
-        // Initialize the UserModel
-        $userModel = new \App\Models\UserModel();
-
-        // Data to insert into the database
+        $userModel = new UserModel();
         $data = [
             'username' => $this->request->getPost('username'),
             'email' => $this->request->getPost('email'),
+            'faculty_id' => $this->request->getPost('faculty_id'),
+            'department_id' => $this->request->getPost('department_id'),
             'password_hash' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'faculty' => $this->request->getPost('faculty'),
-            'department' => $this->request->getPost('department'),
+
+            'role_id' => 3, // Default role: Student
         ];
 
-        $data['role_id'] = 3; // Default role: Student
+        log_message('debug', 'Registering user with data: ' . json_encode($data));
 
-        // Insert the user into the database
         if ($userModel->insert($data)) {
             return redirect()->to('/login')->with('success', 'Registration successful');
         }
 
+        log_message('error', 'Registration failed: ' . json_encode($userModel->errors()));
         return redirect()->back()->with('error', 'Registration failed');
     }
 
@@ -71,6 +87,8 @@ class AuthController extends BaseController //new change
                 'id' => $user['id'],
                 'username' => $user['username'],
                 'role_id' => $user['role_id'],
+                'faculty_id' => $user['faculty_id'],
+                'department_id' => $user['department_id'],
                 'isLoggedIn' => true,
             ]);
 
