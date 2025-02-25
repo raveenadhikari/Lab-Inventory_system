@@ -33,11 +33,13 @@ class AuthController extends BaseController //new change
     public function register()
     {
         $validationRules = [
-            'username' => 'required|min_length[3]|max_length[50]',
-            'email' => 'required|valid_email|max_length[100]',
-            'password' => 'required|min_length[6]',
-            'faculty_id' => 'required|integer',
-            'department_id' => 'required|integer',
+            'username'      => 'required|min_length[3]|max_length[50]',
+            'email'         => 'required|valid_email|max_length[100]',
+            'password'      => 'required|min_length[6]',
+            'mobile_number' => 'required|min_length[7]|max_length[15]',  // NEW: Validate mobile number
+            // Allow faculty and department to be empty (not required)
+            'faculty_id'    => 'permit_empty|integer',
+            'department_id' => 'permit_empty|integer',
         ];
 
         if (!$this->validate($validationRules)) {
@@ -48,13 +50,13 @@ class AuthController extends BaseController //new change
 
         $userModel = new UserModel();
         $data = [
-            'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email'),
-            'faculty_id' => $this->request->getPost('faculty_id'),
-            'department_id' => $this->request->getPost('department_id'),
+            'username'      => $this->request->getPost('username'),
+            'email'         => $this->request->getPost('email'),
+            'mobile_number' => $this->request->getPost('mobile_number'), // NEW: Collect mobile number
+            'faculty_id'    => $this->request->getPost('faculty_id'),     // May be empty
+            'department_id' => $this->request->getPost('department_id'),  // May be empty
             'password_hash' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-
-            'role_id' => 3, // Default role: Student
+            'role_id'       => 3, // Default role: Student
         ];
 
         log_message('debug', 'Registering user with data: ' . json_encode($data));
@@ -82,11 +84,15 @@ class AuthController extends BaseController //new change
 
         $user = $userModel->where('email', $email)->first();
 
+        $roleModel = new \App\Models\RoleModel();
+        $roleData = $roleModel->find($user['role_id']);
+
         if ($user && password_verify($password, $user['password_hash'])) {
             session()->set([
                 'id' => $user['id'],
                 'username' => $user['username'],
                 'role_id' => $user['role_id'],
+                'role'          => $roleData['name'],
                 'faculty_id' => $user['faculty_id'],
                 'department_id' => $user['department_id'],
                 'isLoggedIn' => true,

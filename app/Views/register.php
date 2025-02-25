@@ -4,7 +4,6 @@
 <div class="container mt-5">
     <div class="row justify-content-center align-items-center vh-100">
         <div class="col-md-10 col-lg-8">
-
             <!-- Register Card -->
             <div class="card shadow rounded">
                 <div class="row g-0">
@@ -12,10 +11,8 @@
                     <div class="col-md-5 d-none d-md-block">
                         <img src="/images/uni.jpg" alt="University Photo" class="img-fluid rounded-start h-100" style="object-fit: cover;">
                     </div>
-
                     <!-- Form Section -->
                     <div class="col-md-7 p-4">
-                        <!-- Subtle Text Above the Heading -->
                         <h6 class="text-center text-muted mb-1">Lab Inventory Management System</h6>
                         <h3 class="text-center mb-4">Register</h3>
 
@@ -25,7 +22,6 @@
                                 <?= session()->getFlashdata('error') ?>
                             </div>
                         <?php endif; ?>
-
                         <?php if (session()->getFlashdata('success')): ?>
                             <div class="alert alert-success">
                                 <?= session()->getFlashdata('success') ?>
@@ -47,16 +43,19 @@
                             <div class="mb-3 position-relative">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-                                <button type="button" class="btn btn-light btn-sm position-absolute end-0 top-0 mt-1 me-1" id="togglePassword" data-target="password" style="border: none;">
-                                    👁️
-                                </button>
+                                <button type="button" class="btn btn-light btn-sm position-absolute end-0 top-0 mt-1 me-1" id="togglePassword" data-target="password" style="border: none;">👁️</button>
+                            </div>
+
+                            <!-- NEW: Mobile Number Field -->
+                            <div class="mb-3">
+                                <label for="mobile_number" class="form-label">Mobile Number</label>
+                                <input type="text" name="mobile_number" id="mobile_number" class="form-control" placeholder="Enter your mobile number" required>
                             </div>
 
                             <div class="form-group mb-3">
                                 <label for="faculty">Faculty</label>
-                                <select class="form-control" id="faculty" name="faculty_id" required>
-                                    <option value="">Select Faculty</option>
-                                    <!-- Populate with faculties from the database -->
+                                <select class="form-control" id="faculty" name="faculty_id">
+                                    <option value="">Select Faculty (optional)</option>
                                     <?php foreach ($faculties as $faculty): ?>
                                         <option value="<?= $faculty['id'] ?>"><?= $faculty['name'] ?></option>
                                     <?php endforeach; ?>
@@ -64,9 +63,8 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="department">Department</label>
-                                <select class="form-control" id="department" name="department_id" required>
-                                    <option value="">Select Department</option>
-                                    <!-- Populate with departments from the database -->
+                                <select class="form-control" id="department" name="department_id">
+                                    <option value="">Select Department (optional)</option>
                                     <?php foreach ($departments as $department): ?>
                                         <option value="<?= $department['id'] ?>"><?= $department['name'] ?></option>
                                     <?php endforeach; ?>
@@ -85,7 +83,5 @@
         </div>
     </div>
 </div>
-
-<!-- Script to handle Faculty-Department Dependency -->
 
 <?= $this->endSection() ?>

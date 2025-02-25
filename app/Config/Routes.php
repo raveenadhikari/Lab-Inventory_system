@@ -45,10 +45,11 @@ $routes->post('/login', 'AuthController::login');          // Handle login submi
 
 $routes->get('/homepage', 'HomeController::index');     // Display the homepage
 $routes->get('/logout', 'AuthController::logout');
+$routes->get('/admin-dashboard', 'AdminController::dashboard', ['filter' => 'rolecheck:admin,superadmin']);
 
 
 // Admin Dashboard
-$routes->get('/dashboard', 'AdminController::dashboard', ['filter' => 'rolecheck:admin']); // Display admin dashboard
+//$routes->get('/dashboard', 'AdminController::dashboard', ['filter' => 'rolecheck:admin']); // Display admin dashboard
 
 // Update User Role
 $routes->post('/update-role/(:num)', 'AdminController::updateRole/$1', ['filter' => 'rolecheck:admin']); // Update user role
@@ -74,13 +75,51 @@ $routes->get('/labs/filter', 'HomeController::filterLabs');
 $routes->get('labs/delete/(:num)', 'LabController::delete/$1');
 
 $routes->get('/labs/view/(:num)', 'LabController::view/$1');
-$routes->get('/labs/view/(:num)/inventory', 'LabController::inventory/$1');
-$routes->get('/labs/view/(:num)/borrowing-log', 'LabController::borrowingLog/$1');
+$routes->get('/labs/view/(:num)/inventory', 'LabController::view/$1');
+$routes->get('labs/view/(:num)/borrowing-log', 'BorrowingController::index/$1');
+
 $routes->get('/labs/view/(:num)/analytics', 'LabController::analytics/$1');
 
 $routes->post('/labs/(:num)/components/add', 'LabController::addComponent/$1');
+$routes->get('components/edit/(:num)', 'LabController::editComponent/$1');
+$routes->post('components/update/(:num)', 'LabController::updateComponent/$1');
 $routes->get('/components/delete/(:num)', 'LabController::deleteComponent/$1');
+$routes->get('/models/category/(:num)', 'LabController::getModelsByCategory/$1');
+$routes->get('/subcategories/category/(:num)', 'LabController::getSubcategoriesByCategory/$1');
+$routes->get('/models/subcategory/(:num)', 'LabController::getModelsBySubcategory/$1');
+$routes->post('/labs/addModel', 'LabController::addModel');
 
+$routes->post('labs/borrow/(:num)', 'LabController::borrow/$1');
+$routes->post('labs/approveRequest/(:num)', 'LabController::approveRequest/$1');
+$routes->get('/labs/view/(:num)/borrowing-log', 'LabController::borrowingLog/$1');
+
+$routes->post('labs/cancelRequest/(:num)', 'LabController::cancelRequest/$1');
+$routes->post('labs/declineRequest/(:num)', 'LabController::declineRequest/$1');
+$routes->post('labs/requestReturn/(:num)', 'LabController::requestReturn/$1');
+
+$routes->post('labs/requestReturn/(:num)', 'LabController::requestReturn/$1');
+$routes->post('labs/acceptReturn/(:num)', 'LabController::acceptReturn/$1');
+$routes->post('labs/declineReturn/(:num)', 'LabController::declineReturn/$1');
+
+$routes->post('labs/addToCart/(:num)', 'LabController::addToCart/$1');
+$routes->get('labs/viewCart', 'LabController::viewCart');
+$routes->post('labs/requestCart', 'LabController::requestCart');
+$routes->post('labs/clearCart', 'LabController::clearCart');
+$routes->get('labs/view/(:num)/analytics', 'LabController::analytics/$1');
+
+$routes->group('borrow', ['namespace' => 'App\Controllers'], static function ($routes) {
+    // Route: GET /borrow/log/123
+    // Calls: BorrowingController->log($labId)
+    $routes->get('log/(:num)', 'BorrowingController::log/$1');
+});
+
+$routes->get('components/(:num)', 'ComponentController::show/$1');
+$routes->post('labs/filterComponents/(:num)', 'LabController::filterComponents/$1');
+$routes->get('components', 'ComponentController::index');
+$routes->get('users/profile/(:num)', 'UserController::profile/$1');
+
+$routes->get('labs/bulkUpload/(:num)', 'LabController::bulkUploadForm/$1');
+$routes->post('labs/bulkUpload/(:num)', 'LabController::bulkUploadProcess/$1');
 
 
 /*

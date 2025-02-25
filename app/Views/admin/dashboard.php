@@ -27,6 +27,12 @@
                         <form method="post" action="/update-role/<?= esc($user['id']) ?>">
                             <select name="role_id">
                                 <?php foreach ($roles as $role): ?>
+                                    <?php
+                                    // Skip the Super Admin role (assuming its id is 1 or name is "Super Admin")
+                                    if ($role['id'] == 1 || strtolower($role['name']) === 'super admin') {
+                                        continue;
+                                    }
+                                    ?>
                                     <option value="<?= esc($role['id']) ?>" <?= $user['role_id'] == $role['id'] ? 'selected' : '' ?>>
                                         <?= esc($role['name']) ?>
                                     </option>

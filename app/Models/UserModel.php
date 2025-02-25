@@ -14,6 +14,7 @@ class UserModel extends Model
         'username',
         'email',
         'password_hash',
+        'mobile_number',    // NEW: Mobile number field added
         'faculty_id',
         'department_id',
         'role_id',
@@ -29,11 +30,13 @@ class UserModel extends Model
 
     // Validation rules for this model
     protected $validationRules = [
-        'username' => 'required|min_length[3]|max_length[50]',
-        'email' => 'required|valid_email|max_length[100]',
+        'username'      => 'required|min_length[3]|max_length[50]',
+        'email'         => 'required|valid_email|max_length[100]',
         'password_hash' => 'required|min_length[6]',
-        'faculty_id' => 'required|integer',
-        'department_id' => 'required|integer',
+        'mobile_number' => 'required|min_length[7]|max_length[15]', // NEW: Mobile number is required (min 7, max 15 characters)
+        // Faculty and department are now optional (allow empty) because not every user will have these values.
+        'faculty_id'    => 'permit_empty|integer',
+        'department_id' => 'permit_empty|integer',
     ];
 
     protected $validationMessages = []; // Custom validation error messages
